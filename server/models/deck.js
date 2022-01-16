@@ -1,19 +1,26 @@
+import { Sequelize } from './index';
+
 const models = require('./index');
 
 export default (sequelize, DataTypes) => {
   const Deck = sequelize.define("deck", {
     id: {
-      type: DataTypes.NUMBER,
-      unique: true
+      type: DataTypes.UUID,
+      defaultValue: Sequelize.UUID,
+      primaryKey: true,
+      allowNull: false,
     },
     user_id: {
-      type: DataTypes.NUMBER
+      type: DataTypes.INTEGER,
+      required: true
     },
     name: {
-      type:DataTypes.STRING
+      type:DataTypes.STRING,
+      required: true,
     },
     size: {
-      type: DataTypes.NUMBER
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     },
   });
 
@@ -23,3 +30,6 @@ export default (sequelize, DataTypes) => {
   return Deck;
 };
 
+
+//get all user card
+//filter kanji list.

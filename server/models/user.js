@@ -1,13 +1,14 @@
+import { Sequelize } from './index';
+
 const models = require('./index');
 
 export default (sequelize, DataType) => {
   const User = sequelize.define("user", {
     id: {
-      type: DataType.INTEGER,
-      autoIncrement: true,
-      required: true,
-      unique: true,
+      type: DataType.UUID,
+      defaultValue: Sequelize.UUID,
       primaryKey: true,
+      allowNull: false,
     },
     username: {
       type: DataTypes.STRING,
@@ -19,20 +20,20 @@ export default (sequelize, DataType) => {
       required: true,
       unique: true,
     },
-    passowrd: {
+    password: {
       type: DataTypes.STRING,
       required: true,
     },
     score: {
       type: DataTypes.INTEGER,
-      required: true
+      defaultValue: 0,
     },
   })
 
   User.hasMany(models.deck, {sourceKey: "id", foreignKey: "user_id", as:"deck"})
   models.deck.belongsTo(User, { foreignKey: "user_id"})
 
-  User.hasMany(models.card, {sourceKey: "id", as:"card"})
+  User.hasMany(models.card, {sourceKey: "id", foreignKey: 'user_id', as:"card"})
   models.card.belongsTo(User, { foreignKey: "user_id"})
 
   return User;

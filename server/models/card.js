@@ -1,11 +1,15 @@
+import { Sequelize } from './index';
+
 const models = require('./index');
 
 export default (sequelize, DataTypes) => {
   const Card = sequelize.define("card", {
     id: {
-      type: DataTypes.NUMBER,
-      unique: true,
-      required: true,
+      //UUID sequelize
+      type: DataTypes.UUID,
+      defaultValue: Sequelize.UUID,
+      primaryKey: true,
+      allowedNull: false,
     },
     character: {
       type: DataTypes.STRING,

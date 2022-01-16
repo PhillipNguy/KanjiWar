@@ -10,9 +10,9 @@ exports.register = async (req, res) => {
   try {
     const {username, email, password } = req.body;
     const hash = await bcrypt.hash(password, saltRounds);
-    const userExist = await db.User.findAll({where: { username, email }, include: [{ or: true}]})
+    const userExist = await db.User.findOne({where: { username, email }, include: [{ or: true}]})
     // || db.User.findAll({where: { email }});
-    if (userExist.length > 0) return res.status(409).send({message: "Email or Username already exist"});
+    if (userExist) return res.status(409).send({message: "Email or Username already exist"});
     const user = await db.User.create({
       ...req.body,
       password: hash,
@@ -42,10 +42,13 @@ exports.login = async (req, res) => {
   };
 };
 
-// exports.logout = async (req, res) => {
-//   try {
-//     req.session.destroy
-//   } catch (e) {
-//     res.status(500).send({message: "Could not log out!"})
-//   }
-// }
+
+//CHECK AUTHOR EXERCISE
+exports.logout = async (req, res) => {
+    req.session.destroy((e)=>{
+      if (e) res.status(500).send(e);
+      else {
+        res.clear()
+      }
+    })
+}
