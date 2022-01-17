@@ -1,17 +1,30 @@
+const fs = require('fs');
+const path = require('path');
 const Sequelize = require("sequelize");
 
 const config = {
   host: "localhost",
   dialect: "postgres",
-  port: 54332,
+  port: 5432,
+  logging: false,
 }
 
-const sequelize = new Sequelize('kanjiwar', 'postgres', 'postgres', config);
+const sequelize = new Sequelize('kanjiwar', 'athena', '', config);
+//const db = {}
+
+// const files = fs.readdirSync(__dirname);
+
+// for (const file of files) {
+//   if (file !== 'index.js') {
+//     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+//     db[model.name] = model;
+//   }
+// }
 
 const models = {
-  user: sequelize.import("./user"),
-  deck: sequelize.import("./deck"),
-  card: sequelize.import("./card"),
+  User: require("./user") (sequelize, Sequelize.DataTypes),
+  Deck: require("./deck") (sequelize, Sequelize.DataTypes),
+  Card: require("./card") (sequelize, Sequelize.DataTypes),
 }
 
 Object.keys(models).forEach((modelName) => {

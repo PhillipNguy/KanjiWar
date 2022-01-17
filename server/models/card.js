@@ -1,27 +1,27 @@
-import { Sequelize } from './index';
-
+// import { Sequelize } from './index';
+const Sequelize = require('sequelize')
 const models = require('./index');
 
-export default (sequelize, DataTypes) => {
-  const Card = sequelize.define("card", {
+module.exports = (sequelize, DataTypes) => {
+  const Card = sequelize.define("Card", {
     id: {
       //UUID sequelize
       type: DataTypes.UUID,
-      defaultValue: Sequelize.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowedNull: false,
     },
-    character: {
+    kanji: {
       type: DataTypes.STRING,
       unique: true,
       required: true,
     },
     deck_id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.UUID,
       required: true,
     },
     user_id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.UUID,
       required: true,
     },
     meaning: {

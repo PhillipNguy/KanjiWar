@@ -1,17 +1,17 @@
-import { Sequelize } from './index';
-
+// import { Sequelize } from './index';
+const Sequelize = require('sequelize')
 const models = require('./index');
 
-export default (sequelize, DataTypes) => {
-  const Deck = sequelize.define("deck", {
+module.exports = (sequelize, DataTypes) => {
+  const Deck = sequelize.define("Deck", {
     id: {
       type: DataTypes.UUID,
-      defaultValue: Sequelize.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       required: true
     },
     name: {
@@ -24,8 +24,11 @@ export default (sequelize, DataTypes) => {
     },
   });
 
-  Deck.hasMany(models.card, {sourceKey: "id", foreignKey: "deck_id", as:"card"})
-  models.card.belongTo(Deck, {foreignKey: "deck_id"})
+  Deck.associate = (models) => {
+    models.Deck.hasMany(models.Card, {sourceKey: "id", foreignKey: "deck_id", as:"card"})
+    models.Card.belongsTo(Deck, {foreignKey: "deck_id"})
+  }
+
 
   return Deck;
 };

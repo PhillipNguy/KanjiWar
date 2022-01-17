@@ -1,12 +1,13 @@
-import { Sequelize } from './index';
-
+// import { Sequelize } from './index';
+const Sequelize = require('sequelize');
+//const { user } = require('../controllers');
 const models = require('./index');
 
-export default (sequelize, DataType) => {
-  const User = sequelize.define("user", {
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define("User", {
     id: {
-      type: DataType.UUID,
-      defaultValue: Sequelize.UUID,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
     },
@@ -30,11 +31,14 @@ export default (sequelize, DataType) => {
     },
   })
 
-  User.hasMany(models.deck, {sourceKey: "id", foreignKey: "user_id", as:"deck"})
-  models.deck.belongsTo(User, { foreignKey: "user_id"})
+  User.associate = (models) => {
+    models.User.hasMany(models.Deck, {sourceKey: "id", foreignKey: "user_id", as:"deck"})
+    models.Deck.belongsTo(User, { foreignKey: "user_id"})
 
-  User.hasMany(models.card, {sourceKey: "id", foreignKey: 'user_id', as:"card"})
-  models.card.belongsTo(User, { foreignKey: "user_id"})
+    models.User.hasMany(models.Card, {sourceKey: "id", foreignKey: 'user_id', as:"card"})
+    models.Card.belongsTo(User, { foreignKey: "user_id"})
+  }
+
 
   return User;
 };
