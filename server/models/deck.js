@@ -1,6 +1,6 @@
 // import { Sequelize } from './index';
-const Sequelize = require('sequelize')
-const models = require('./index');
+const Sequelize = require("sequelize");
+const models = require("./index");
 
 module.exports = (sequelize, DataTypes) => {
   const Deck = sequelize.define("Deck", {
@@ -12,27 +12,29 @@ module.exports = (sequelize, DataTypes) => {
     },
     user_id: {
       type: DataTypes.UUID,
-      required: true
+      required: true,
     },
     name: {
-      type:DataTypes.STRING,
+      type: DataTypes.STRING,
       required: true,
     },
     size: {
       type: DataTypes.INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
     },
   });
 
   Deck.associate = (models) => {
-    models.Deck.hasMany(models.Card, {sourceKey: "id", foreignKey: "deck_id", as:"card"})
-    models.Card.belongsTo(Deck, {foreignKey: "deck_id"})
-  }
-
+    models.Deck.hasMany(models.Card, {
+      sourceKey: "id",
+      foreignKey: "deck_id",
+      as: "card",
+    });
+    models.Card.belongsTo(Deck, { foreignKey: "deck_id" });
+  };
 
   return Deck;
 };
-
 
 //get all user card
 //filter kanji list.
